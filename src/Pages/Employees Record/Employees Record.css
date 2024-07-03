@@ -1,0 +1,97 @@
+@font-face {
+  font-family: Sofia-Medim;
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Medium\ Az.otf") format('opentype');
+}
+@font-face {
+  font-family: Sofia-Regular;
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Regular\ Az.otf") format('opentype');
+}
+@font-face {
+  font-family: Sofia-Light;
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Light\ Az.otf") format('opentype');
+}
+@font-face {
+  font-family: Sofia-SemiBold;
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Semi\ Bold\ Az.otf") format('opentype');
+}
+.table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  .table {
+    width: 100%;
+    max-width: 600px; /* Optional: adjust as needed */
+
+  }
+  body {
+    background-image: url("../../assets/images/bgs.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh !important;
+        
+      }
+      /* .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      
+      .table {
+        width: 100%;
+        max-width: 1200px; 
+      }
+      
+      .table td {
+        padding-left: 20px;
+        padding-right: 20px; 
+      }
+       */
+
+       .table-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh !important; 
+      }
+      
+      .table {
+        width: 100%;
+        max-width: 1200px;
+        background-color: #FFFFFF !important;
+      
+      }
+      
+      .table th, .table td {
+       
+        padding: 20px;
+        border-bottom: 1px solid rgba(161, 161, 170, 0.3); /* Adjust the alpha value (0.5) as needed */
+      }
+      th{
+        color: #A1A1AA !important;
+        font-size: 17px;
+        font-family: Sofia-Medim;
+        
+      }
+      td{
+        color: #52525B !important;
+        font-family: Sofia-Medim;
+        font-weight: 600;
+      }
+      .Attend-title{
+        margin-top: 50px;
+        color: #23303B;
+        font-size: 36.9px;
+        font-family:  Sofia-SemiBold !important;
+        font-weight: bold;
+      }
+      .Attend-suptitle{
+        color: #466EFA;
+        font-size: 26.97px;
+        font-family: Sofia-Light;
+
+      }

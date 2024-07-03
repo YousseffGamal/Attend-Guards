@@ -1,0 +1,71 @@
+
+body {
+    background-image: url("../../assets/images/bg.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100% !important;
+      }
+ 
+      @font-face {
+        font-family: Sofia-Medim;
+        src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Medium\ Az.otf") format('opentype');
+      }
+      @font-face {
+        font-family: Sofia-Regular;
+        src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Regular\ Az.otf") format('opentype');
+      }
+      .Login-title{
+color: #FFFFFF;
+font-size: 44.31px;
+font-family: Sofia-Medim;
+text-align: center;
+
+
+      }
+      .input-group{
+        width: 987px;
+        height: 64.12px;
+        margin-left: auto;
+    margin-right: auto;
+      }
+      .login-form{
+        width: 100%;
+      }
+      .Login-suptitle{
+        color: #8E949A;
+        font-size: 33.46px;
+        font-family: Sofia-Regular;
+        text-align: center;
+        margin-bottom: 70px;
+      }
+      .form-control{
+        width: 987px;
+        height: 64.12px;
+      }
+      .login-btn{
+        margin-top: 38px;
+        height: 68.48px;
+        background-color: #456EFE;
+        font-family: Sofia-Medim;
+font-size: 21px;
+width: 987px !important;
+      }
+      @media only screen and (max-width: 768px) {
+        .login-btn{
+          width: 90% !important;
+        }
+        .input-group{
+
+          width: 90% !important;
+        }
+        .login-form{
+          padding: 0 !important;
+        }
+        .Login-title{
+          font-size: 30px;
+        }
+        .Login-suptitle{
+          font-size: 16px;
+        }
+      }
