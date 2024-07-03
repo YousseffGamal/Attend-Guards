@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Employees Record.css";
 import Vector from "../../assets/images/Vector.png"
 import profileImg from "../../assets/images/Group 1653.png"
+import Navbar from '../../component/navbar/navbar';
 const EmployeesRecord = () => {
   return (
     <>
@@ -82,6 +83,7 @@ const EmployeesRecord = () => {
         </tbody>
       </table>
     </div>
+    <Navbar/>
     </>
   );
 }

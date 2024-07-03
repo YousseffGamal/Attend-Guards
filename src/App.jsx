@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Login from "./Pages/Login/Login"
 import EmployeesRecord from "./Pages/Employees Record/Employees Record"
-
+import Navbar from "./component/navbar/navbar"
 function App() {
   const [count, setCount] = useState(0)
 

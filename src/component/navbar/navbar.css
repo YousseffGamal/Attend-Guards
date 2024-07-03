@@ -1,0 +1,37 @@
+.nav {
+  margin-top: 70px;
+    background-color: #EFF3FF;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 514px;
+    height: 85px;
+  }
+  
+  .images-container {
+    display: flex;
+    gap: 100px; /* Adjust this value to control the space between images */
+  }
+  
+  .nav-image {
+    padding: 30px;
+    /* You can add additional styling for the images here if needed */
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .nav {
+      width: auto; /* Allow the nav to resize automatically */
+      flex-direction: column;
+      height: auto; /* Allow the height to adjust automatically */
+      padding: 10px; /* Add some padding for better appearance */
+    }
+    .images-container {
+      flex-direction: column;
+      gap: 20px; /* Adjust the gap for vertical layout */
+    }
+    .nav-image {
+      padding: 10px; /* Adjust padding for smaller screens */
+    }
+  }
+  
