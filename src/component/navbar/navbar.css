@@ -15,19 +15,26 @@
   }
   
   .nav-image {
-    padding: 30px;
+    /* padding: 30px; */
     /* You can add additional styling for the images here if needed */
+    font-size: 36px;
+    color: #8E949A;
+
+  }
+
+  .nav-image.active-icon {
+    color: #466EFA;
   }
   
   @media only screen and (max-width: 768px) {
     .nav {
       width: auto; /* Allow the nav to resize automatically */
-      flex-direction: column;
+      flex-direction: row;
       height: auto; /* Allow the height to adjust automatically */
       padding: 10px; /* Add some padding for better appearance */
     }
     .images-container {
-      flex-direction: column;
+      flex-direction: row;
       gap: 20px; /* Adjust the gap for vertical layout */
     }
     .nav-image {

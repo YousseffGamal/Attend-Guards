@@ -4,6 +4,8 @@ import "./Employees Record.css";
 import Vector from "../../assets/images/Vector.png"
 import profileImg from "../../assets/images/Group 1653.png"
 import Navbar from '../../component/navbar/navbar';
+import { Link } from 'react-router-dom';
+
 const EmployeesRecord = () => {
   return (
     <>
@@ -35,55 +37,88 @@ const EmployeesRecord = () => {
             <td>John Doe</td>
             <td>9:00 AM - 5:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           <tr style={{border:"none"}}>
             <td>Jane Smith</td>
             <td>10:00 AM - 6:00 PM</td>
             <td>1/5 : 21/5</td>
-            <td><img src={Vector} alt="" /></td>
+             <td>
+                <Link to="/DailyRecords">
+                  <img src={Vector} alt="Navigate" />
+                </Link>
+              </td>
           </tr>
           {/* Add more rows as needed */}
         </tbody>
       </table>
     </div>
-    <Navbar/>
+    <Navbar activeIcon="clock" />
+
     </>
   );
 }

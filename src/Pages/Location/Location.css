@@ -1,0 +1,23 @@
+.map-container {
+    margin-top: 20px; /* Adjust margin as needed */
+    text-align: center;
+  }
+  
+  .responsive-map {
+    width: 100%; /* Ensure the map fills its container */
+    max-width: 1028px; /* Adjust maximum width as needed */
+    height: 710.61px; /* Adjust height as needed */
+    border-radius: 35px;
+    border: 2px solid #456EFE;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    .responsive-map{
+        width: 100%;
+        height: 100%;
+    }
+  }
+  html{
+
+    height: 110% !important;
+  }

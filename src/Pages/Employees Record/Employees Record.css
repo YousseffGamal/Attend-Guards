@@ -1,18 +1,18 @@
 @font-face {
   font-family: Sofia-Medim;
-  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Medium\ Az.otf") format('opentype');
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Medium\ Az.ttf") ;
 }
 @font-face {
   font-family: Sofia-Regular;
-  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Regular\ Az.otf") format('opentype');
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Regular\ Az.ttf") ;
 }
 @font-face {
   font-family: Sofia-Light;
-  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Light\ Az.otf") format('opentype');
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Light\ Az.ttf") ;
 }
 @font-face {
   font-family: Sofia-SemiBold;
-  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Semi\ Bold\ Az.otf") format('opentype');
+  src: url("../../assets/Fonts/Sofia/Sofia\ Pro\ Semi\ Bold\ Az.ttf") ;
 }
 .table-container {
     display: flex;
