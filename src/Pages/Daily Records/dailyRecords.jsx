@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./Daily Records.css";
+import Style from "./dailyRecords.module.css";
 import Vector from "../../assets/images/Vector.png"
 import profileImg from "../../assets/images/Group 1653.png"
 import Navbar from '../../component/navbar/navbar';
