@@ -18,14 +18,14 @@ const addUser = () => {
 
   return (
     <>
-     <div className={classNames("container")}>
+      <div className={classNames("container")}>
         <div className={classNames("row", "align-items-center")}>
           <div className={classNames("col")}>
             <h1 className={classNames(Style.attendTitle, "text-center")}>
               Attend Guards
             </h1>
             <p className={classNames(Style.attendSuptitle, "text-center")}>
-            Add Employee
+              Add Employee
             </p>
           </div>
           <div
@@ -95,6 +95,18 @@ const addUser = () => {
                   )}
                   placeholder="Email"
                 />
+                      <select
+                  className={classNames(
+                    "form-control",
+                    Style.customInput,
+                    "mb-3"
+                  )}
+                >
+                  <option value="">Select Role</option>
+                  <option value="option1">Admin </option>
+                  <option value="option2">employee </option>
+                </select>
+
                 <input
                   type="password"
                   className={classNames(
@@ -113,6 +125,10 @@ const addUser = () => {
                   )}
                   placeholder="Confirm Password"
                 />
+                {/* Option Input */}
+              
+                {/* Select Input */}
+          
                 <button
                   type="submit"
                   className={classNames(
@@ -130,7 +146,6 @@ const addUser = () => {
         </div>
       </div>
       <Navbar activeIcon="plus" />
-
     </>
   );
 };
