@@ -7,6 +7,7 @@ import Login from "./Pages/Login/Login";
 import SetLocation from "./Pages/Location/Location";
 import Users from "./Pages/users/users";
 import ProfilePage from "./Pages/profile/profile";
+import Adduser from "./Pages/addUser/addUser";
 // 
 const ProjectRoutes = () => {
   return (
@@ -20,6 +21,7 @@ const ProjectRoutes = () => {
           <Route path="/SetLocation" element={<SetLocation />} />
           <Route path="/users" element={<Users />} />
           <Route path="/ProfilePage" element={<ProfilePage />} />
+          <Route path="/Adduser" element={<Adduser />} />
 
 
 
