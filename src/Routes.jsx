@@ -4,7 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EmployeesRecords from "./Pages/Employees Record/employeesRecord"; 
 import DailyRecords from "./Pages/Daily Records/dailyRecords";
 import Login from "./Pages/Login/Login";
-import SetLocation from "./Pages/Location/Location"
+import SetLocation from "./Pages/Location/Location";
+import Users from "./Pages/users/users";
+import ProfilePage from "./Pages/profile/profile";
 // 
 const ProjectRoutes = () => {
   return (
@@ -16,6 +18,8 @@ const ProjectRoutes = () => {
           <Route path="/DailyRecords" element={<DailyRecords />} />
           <Route path="/EmployeesRecords" element={<EmployeesRecords />} />
           <Route path="/SetLocation" element={<SetLocation />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/ProfilePage" element={<ProfilePage />} />
 
 
 

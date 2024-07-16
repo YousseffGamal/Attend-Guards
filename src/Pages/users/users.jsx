@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Style from "./employeesRecord.module.css";
+import Style from "./users.module.css";
 import Vector from "../../assets/images/Vector.png";
 import profileImg from "../../assets/images/Group 1653.png";
 import Navbar from "../../component/navbar/navbar";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { FaUser } from "react-icons/fa";
+import { Modal, Button } from "react-bootstrap"; // Import Bootstrap modal components
 
-const EmployeesRecord = () => {
+const Users = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [showExportBtn, setShowExportBtn] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false); // State for showing export modal
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -46,20 +48,27 @@ const EmployeesRecord = () => {
   };
 
   const handleExport = () => {
-    alert("Exporting selected rows...");
+    setShowExportModal(true); // Show export modal on export click
+  };
+
+  const handleProfileClick = (index) => {
+    alert(`Opening profile for user at index: ${index}`);
+    // You can replace this with the actual logic to open the user's profile
+  };
+
+  const handleDelete = (index) => {
+    // Implement your delete logic here
+    console.log(`Deleting user at index: ${index}`);
   };
 
   const data = [
-    { name: "John Doe", hours: "9:00 AM - 5:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-    { name: "Jane Smith", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
-
-
+    { name: "John Doe", username: "johnd", email: "john.doe@example.com", roles: "Admin"},
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
+    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
   ];
 
   return (
@@ -72,7 +81,7 @@ const EmployeesRecord = () => {
                 Attend Guards
               </h1>
               <p className={classNames(Style.attendSuptitle, "text-center")}>
-                Employees record
+                Employees
               </p>
             </div>
             <div
@@ -121,9 +130,7 @@ const EmployeesRecord = () => {
         </div>
 
         <div className={classNames(Style.tableContainer, "table-responsive")}>
-          <table
-            className={classNames(Style.table, "table-responsive", "table")}
-          >
+          <table className={classNames(Style.table, "table-responsive", "table")}>
             <thead>
               <tr>
                 <th>
@@ -134,9 +141,11 @@ const EmployeesRecord = () => {
                   />
                 </th>
                 <th>NAME</th>
-                <th>HOURS</th>
-                <th>FROM:TO</th>
-                <th></th>
+                <th>USERNAME</th>
+                <th>EMAIL</th>
+                <th>ROLES</th>
+                <th>RECORDS</th>
+                <th>ACTION</th>
               </tr>
             </thead>
             <tbody>
@@ -150,13 +159,16 @@ const EmployeesRecord = () => {
                     />
                   </td>
                   <td>{row.name}</td>
-                  <td>{row.hours}</td>
-                  <td>{row.period}</td>
-                  
-                  <td>
-                    <Link to="/DailyRecords">
+                  <td>{row.username}</td>
+                  <td>{row.email}</td>
+                  <td>{row.roles}</td>
+                  <td>  <Link to="/DailyRecords">
                       <img src={Vector} alt="Navigate" />
-                    </Link>
+                    </Link></td>
+                  <td>
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -165,12 +177,30 @@ const EmployeesRecord = () => {
         </div>
 
         {showExportBtn && (
-          <div className="text-center ">
+          <div className="text-center">
             <button className="btn btn-primary" onClick={handleExport}>
               Export Selected
             </button>
           </div>
         )}
+
+        {/* Export Modal */}
+        <Modal show={showExportModal} onHide={() => setShowExportModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Export Selected Rows</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to export the selected rows?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowExportModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={handleExport}>
+              Export
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <Navbar activeIcon="clock" />
       </div>
@@ -178,4 +208,4 @@ const EmployeesRecord = () => {
   );
 };
 
-export default EmployeesRecord;
+export default Users;

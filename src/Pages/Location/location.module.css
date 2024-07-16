@@ -1,0 +1,52 @@
+.mapContainer {
+  position: relative;
+  margin-top: 20px; /* Adjust margin as needed */
+  text-align: center;
+}
+
+.responsiveMap {
+  width: 100%; /* Ensure the map fills its container */
+  max-width: 1028px; /* Adjust maximum width as needed */
+  height: 710.61px; /* Adjust height as needed */
+  border-radius: 35px;
+  border: 2px solid #456EFE;
+}
+
+.formOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 60%; /* Adjust the form width as needed */
+  z-index: 1;
+}
+
+.searchBarContainer {
+  margin-top: 20px;
+}
+
+.attendTitle {
+  margin-top: 50px;
+  color: #23303B;
+  font-size: 36.9px;
+  font-family: "Sofia-SemiBold", sans-serif !important;
+  font-weight: bold;
+}
+
+.attendSuptitle {
+  color: #466EFA;
+  font-size: 26.97px;
+  font-family: "Sofia-Light", sans-serif;
+}
+
+@media only screen and (max-width: 768px) {
+  .responsiveMap {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+html {
+  height: 120% !important;
+}
