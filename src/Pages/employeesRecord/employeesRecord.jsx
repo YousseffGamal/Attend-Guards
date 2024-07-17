@@ -108,7 +108,9 @@ const EmployeesRecord = () => {
                     }}
                   >
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                      Profile
+                    <Link to="/ProfilePage">
+                    Profile 
+                    </Link>
                     </li>
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       Logout
@@ -154,7 +156,7 @@ const EmployeesRecord = () => {
                   <td>{row.period}</td>
                   
                   <td>
-                    <Link to="/DailyRecords">
+                    <Link to="/dailyrecords">
                       <img src={Vector} alt="Navigate" />
                     </Link>
                   </td>

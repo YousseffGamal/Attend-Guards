@@ -117,7 +117,9 @@ const Users = () => {
                     }}
                   >
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                      Profile
+                    <Link to="/ProfilePage">
+                    Profile 
+                    </Link>
                     </li>
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       Logout
@@ -162,7 +164,7 @@ const Users = () => {
                   <td>{row.username}</td>
                   <td>{row.email}</td>
                   <td>{row.roles}</td>
-                  <td>  <Link to="/DailyRecords">
+                  <td>  <Link to="/dailyrecords">
                       <img src={Vector} alt="Navigate" />
                     </Link></td>
                   <td>
@@ -202,7 +204,7 @@ const Users = () => {
           </Modal.Footer>
         </Modal>
 
-        <Navbar activeIcon="clock" />
+        <Navbar activeIcon="users" />
       </div>
     </>
   );

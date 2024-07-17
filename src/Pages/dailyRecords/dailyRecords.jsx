@@ -113,7 +113,9 @@ const EmployeesRecord = () => {
                     }}
                   >
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                      Profile
+                    <Link to="/ProfilePage">
+                    Profile 
+                    </Link>
                     </li>
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       Logout

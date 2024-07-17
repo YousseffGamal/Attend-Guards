@@ -4,6 +4,7 @@ import Style from "./addUser.module.css";
 import profileImg from "../../assets/images/Group 1653.png";
 import classNames from "classnames";
 import Navbar from "../../component/navbar/navbar";
+import { Link } from "react-router-dom";
 
 const addUser = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -61,7 +62,9 @@ const addUser = () => {
                   }}
                 >
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                    Profile
+                    <Link to="/ProfilePage">
+                    Profile 
+                    </Link>
                   </li>
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                     Logout
@@ -86,6 +89,15 @@ const addUser = () => {
                   )}
                   placeholder="Name"
                 />
+                 <input
+                  type="text"
+                  className={classNames(
+                    "form-control",
+                    Style.customInput,
+                    "mb-3"
+                  )}
+                  placeholder="Username"
+                />
                 <input
                   type="email"
                   className={classNames(
@@ -95,17 +107,7 @@ const addUser = () => {
                   )}
                   placeholder="Email"
                 />
-                      <select
-                  className={classNames(
-                    "form-control",
-                    Style.customInput,
-                    "mb-3"
-                  )}
-                >
-                  <option value="">Select Role</option>
-                  <option value="option1">Admin </option>
-                  <option value="option2">employee </option>
-                </select>
+                  
 
                 <input
                   type="password"
@@ -126,7 +128,17 @@ const addUser = () => {
                   placeholder="Confirm Password"
                 />
                 {/* Option Input */}
-              
+                <select
+                  className={classNames(
+                    "form-control",
+                    Style.customInput,
+                    "mb-3"
+                  )}
+                >
+                  <option value="">Select Role</option>
+                  <option value="option1">Admin </option>
+                  <option value="option2">employee </option>
+                </select>
                 {/* Select Input */}
           
                 <button

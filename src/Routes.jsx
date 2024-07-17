@@ -16,12 +16,12 @@ const ProjectRoutes = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           {/* <Route path="/AddEmployee" element={<AddEmployee />} /> */}
-          <Route path="/DailyRecords" element={<DailyRecords />} />
-          <Route path="/EmployeesRecords" element={<EmployeesRecords />} />
-          <Route path="/SetLocation" element={<SetLocation />} />
+          <Route path="/dailyrecords" element={<DailyRecords />} />
+          <Route path="/employeesrecords" element={<EmployeesRecords />} />
+          <Route path="/setlocation" element={<SetLocation />} />
           <Route path="/users" element={<Users />} />
-          <Route path="/ProfilePage" element={<ProfilePage />} />
-          <Route path="/Adduser" element={<Adduser />} />
+          <Route path="/profilepage" element={<ProfilePage />} />
+          <Route path="/adduser" element={<Adduser />} />
 
 
 

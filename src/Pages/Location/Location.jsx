@@ -5,6 +5,7 @@ import Style from "./location.module.css";
 import profileImg from "../../assets/images/Group 1653.png";
 import Navbar from '../../component/navbar/navbar';
 import classNames from "classnames";
+import { Link } from "react-router-dom";
 
 const Location = () => {
   const [showOptions, setShowOptions] = useState(false);
@@ -72,7 +73,9 @@ const Location = () => {
                   }}
                 >
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                    Profile
+                  <Link to="/ProfilePage">
+                    Profile 
+                    </Link>
                   </li>
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                     Logout
@@ -117,7 +120,7 @@ const Location = () => {
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
-                  <FaUser />
+                  <FaUser style={{fontSize:"1.5rem"}} />
                 </span>
               </div>
               <input
@@ -129,22 +132,21 @@ const Location = () => {
               />
             </div>
           </div>
+          
           <div className="col-md-4 mb-3">
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
-                  <FaRuler />
+                  <FaRuler style={{fontSize:"1.5rem"}}  />
                 </span>
               </div>
               <input
-                type="range"
-                className="form-control-range"
-                min={0}
-                max={100}
-                value={range}
+                type="number"
+                className="form-control"
+                placeholder="Range in meter"
+
                 onChange={handleRangeChange}
               />
-              <span className="ml-2">{range}</span>
             </div>
           </div>
         </div>
