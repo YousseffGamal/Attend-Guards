@@ -8,6 +8,7 @@ import SetLocation from "./Pages/Location/Location";
 import Users from "./Pages/users/users";
 import ProfilePage from "./Pages/profile/profile";
 import Adduser from "./Pages/addUser/addUser";
+import AddAdmin from "./Pages/addAdmin/addAdmin";
 // 
 const ProjectRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const ProjectRoutes = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/profilepage" element={<ProfilePage />} />
           <Route path="/adduser" element={<Adduser />} />
+          <Route path="/addadmin" element={<AddAdmin />} />
 
 
 
