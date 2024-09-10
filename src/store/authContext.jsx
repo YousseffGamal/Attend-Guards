@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     companyId: JSON.parse(localStorage.getItem("companyId")) || null,
     
     
+    
   });
 
   const login = async (cred) => {
