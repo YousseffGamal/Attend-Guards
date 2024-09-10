@@ -8,12 +8,13 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { FaUser } from "react-icons/fa";
 
+
 const EmployeesRecord = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [showExportBtn, setShowExportBtn] = useState(false);
-
+ 
   const handleMouseEnter = () => {
     setShowOptions(true);
   };
@@ -64,6 +65,7 @@ const EmployeesRecord = () => {
 
   return (
     <>
+    
       <div>
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
