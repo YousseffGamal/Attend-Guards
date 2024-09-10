@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios"; // Import axios (this is correct if you don't have an axiosInstance)
 import Style from "./users.module.css";
 import Vector from "../../assets/images/Vector.png";
 import profileImg from "../../assets/images/Group 1653.png";
@@ -15,6 +16,39 @@ const Users = () => {
   const [selectedRows, setSelectedRows] = useState({});
   const [showExportBtn, setShowExportBtn] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false); // State for showing export modal
+  const [employees, setEmployees] = useState([]); // State for storing employee data
+  const [loading, setLoading] = useState(true); // State for loading status
+
+  useEffect(() => {
+    // Fetch employee data from the API using axios
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/getallemployees"); // Replace with your actual API endpoint
+        setEmployees(response.data.AllEmployees); // Update state with fetched data
+        setLoading(false); // Set loading to false after data is fetched
+      } catch (error) {
+        console.error("Error fetching employees:", error);
+        setLoading(false); // Set loading to false even on error
+      }
+    };
+
+    fetchEmployees();
+  }, []);
+
+  // Delete function using axios
+  const handleDelete = async (id) => {
+    const confirmed = window.confirm("Are you sure you want to delete this employee?");
+    if (confirmed) {
+      try {
+        await axios.delete(`http://localhost:3000/deleteemployee/${id}`); // Use axios.delete
+        setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee._id !== id));
+        alert("Employee deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting employee:", error);
+        alert("Failed to delete employee.");
+      }
+    }
+  };
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -28,7 +62,7 @@ const Users = () => {
     setSelectAll(!selectAll);
     const updatedSelectedRows = {};
     if (!selectAll) {
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < employees.length; i++) {
         updatedSelectedRows[i] = true;
       }
     }
@@ -47,8 +81,18 @@ const Users = () => {
     setShowExportBtn(anySelected);
   };
 
+  // Show modal when clicking Export
   const handleExport = () => {
-    setShowExportModal(true); // Show export modal on export click
+    setShowExportModal(true); // Show export modal
+  };
+
+  // Confirm export inside the modal
+  const handleConfirmExport = () => {
+    // Handle your export logic here
+    console.log("Exporting selected rows:", selectedRows);
+
+    // Close the modal after export
+    setShowExportModal(false);
   };
 
   const handleProfileClick = (index) => {
@@ -56,20 +100,9 @@ const Users = () => {
     // You can replace this with the actual logic to open the user's profile
   };
 
-  const handleDelete = (index) => {
-    // Implement your delete logic here
-    console.log(`Deleting user at index: ${index}`);
-  };
-
-  const data = [
-    { name: "John Doe", username: "johnd", email: "john.doe@example.com", roles: "Admin"},
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-    { name: "Jane Smith", username: "janes", email: "jane.smith@example.com", roles: "User" },
-  ];
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -117,9 +150,7 @@ const Users = () => {
                     }}
                   >
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                    <Link to="/ProfilePage">
-                    Profile 
-                    </Link>
+                      <Link to="/ProfilePage">Profile</Link>
                     </li>
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       Logout
@@ -151,8 +182,8 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((row, index) => (
-                <tr key={index}>
+              {employees.map((employee, index) => (
+                <tr key={employee._id}>
                   <td>
                     <input
                       type="checkbox"
@@ -160,15 +191,20 @@ const Users = () => {
                       onChange={() => handleRowSelect(index)}
                     />
                   </td>
-                  <td>{row.name}</td>
-                  <td>{row.username}</td>
-                  <td>{row.email}</td>
-                  <td>{row.roles}</td>
-                  <td>  <Link to="/dailyrecords">
-                      <img src={Vector} alt="Navigate" />
-                    </Link></td>
+                  <td>{employee.name || "N/A"}</td>
+                  <td>{employee.username}</td>
+                  <td>{employee.email}</td>
+                  <td>{employee.role}</td>
                   <td>
-                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(index)}>
+                    <Link to="/dailyrecords">
+                      <img src={Vector} alt="Navigate" />
+                    </Link>
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleDelete(employee._id)}     
+                    >
                       Delete
                     </button>
                   </td>
@@ -198,7 +234,7 @@ const Users = () => {
             <Button variant="secondary" onClick={() => setShowExportModal(false)}>
               Cancel
             </Button>
-            <Button variant="primary" onClick={handleExport}>
+            <Button variant="primary" onClick={handleConfirmExport}> {/* Use handleConfirmExport here */}
               Export
             </Button>
           </Modal.Footer>

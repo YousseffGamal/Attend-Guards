@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     companyId: JSON.parse(localStorage.getItem("companyId")) || null,
     
     
+    
   });
 
   const login = async (cred) => {
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
       // Save data to localStorage
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("companyId", JSON.stringify(data.user.companyId));
+      localStorage.setItem("companyId", data.user.companyId); 
       return { success: true, data };
     } catch (error) {
       console.log("Login failed:", error);

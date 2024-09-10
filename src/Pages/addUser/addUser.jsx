@@ -5,9 +5,18 @@ import profileImg from "../../assets/images/Group 1653.png";
 import classNames from "classnames";
 import Navbar from "../../component/navbar/navbar";
 import { Link } from "react-router-dom";
+import axiosInstance from '../../axios'; // Import your axios instance
 
-const addUser = () => {
+const AddUser = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: ''
+  });
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -17,6 +26,38 @@ const addUser = () => {
     setShowOptions(false);
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const { name, username, email, password, role } = formData;
+    
+    // Retrieve companyId from localStorage
+    let companyId = localStorage.getItem('companyId');
+  
+    // Ensure companyId is a plain string without extra quotes
+    companyId = companyId ? companyId.replace(/^"|"$/g, '') : '';
+  
+    console.log('Company ID:', companyId); 
+  
+    try {
+      const response = await axiosInstance.post('/addemployee', {
+        name,
+        username,
+        email,
+        password,
+        role,
+        companyId 
+      });
+      console.log('Employee added:', response.data);
+    } catch (error) {
+      console.error('Error adding employee:', error.response?.data || error);
+    }
+  };
+  
   return (
     <>
       <div className={classNames("container")}>
@@ -63,7 +104,7 @@ const addUser = () => {
                 >
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                     <Link to="/ProfilePage">
-                    Profile 
+                      Profile
                     </Link>
                   </li>
                   <li style={{ padding: "5px 10px", cursor: "pointer" }}>
@@ -78,10 +119,13 @@ const addUser = () => {
         {/* Form Section */}
         <div className={classNames("row justify-content-center mt-5")}>
           <div className={classNames("col-md-auto")}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={classNames("form-group")}>
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -89,8 +133,11 @@ const addUser = () => {
                   )}
                   placeholder="Name"
                 />
-                 <input
+                <input
                   type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -100,6 +147,9 @@ const addUser = () => {
                 />
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -107,10 +157,11 @@ const addUser = () => {
                   )}
                   placeholder="Email"
                 />
-                  
-
                 <input
                   type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -120,6 +171,9 @@ const addUser = () => {
                 />
                 <input
                   type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -127,8 +181,10 @@ const addUser = () => {
                   )}
                   placeholder="Confirm Password"
                 />
-                {/* Option Input */}
                 <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
@@ -136,11 +192,9 @@ const addUser = () => {
                   )}
                 >
                   <option value="">Select Role</option>
-                  <option value="option1">Admin </option>
-                  <option value="option2">employee </option>
+                  <option value="admin">Admin</option>
+                  <option value="employee">Employee</option>
                 </select>
-                {/* Select Input */}
-          
                 <button
                   type="submit"
                   className={classNames(
@@ -162,4 +216,4 @@ const addUser = () => {
   );
 };
 
-export default addUser;
+export default AddUser;
