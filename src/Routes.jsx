@@ -9,6 +9,7 @@ import Users from "./Pages/users/users";
 import ProfilePage from "./Pages/profile/profile";
 import Adduser from "./Pages/addUser/addUser";
 import AddAdmin from "./Pages/addAdmin/addAdmin";
+import ProtectedRoute from './utiliteis/protectedRoute';
 // 
 const ProjectRoutes = () => {
   return (
@@ -17,6 +18,10 @@ const ProjectRoutes = () => {
         <Routes>
           <Route path="/" element={<Login />} />
           {/* <Route path="/AddEmployee" element={<AddEmployee />} /> */}
+
+          {/* <Route element={<ProtectedRoute redirectTo="/" />}> */}
+
+
           <Route path="/dailyrecords" element={<DailyRecords />} />
           <Route path="/employeesrecords" element={<EmployeesRecords />} />
           <Route path="/setlocation" element={<SetLocation />} />
@@ -26,6 +31,7 @@ const ProjectRoutes = () => {
           <Route path="/addadmin" element={<AddAdmin />} />
 
 
+          {/* </Route> */}
 
         </Routes>
       </Router>

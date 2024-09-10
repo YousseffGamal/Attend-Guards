@@ -1,13 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Style from "./addAdmin.module.css";
 import profileImg from "../../assets/images/Group 1653.png";
 import classNames from "classnames";
 import Navbar from "../../component/navbar/navbar";
 import { Link } from "react-router-dom";
+import axiosInstance from "../../axios";
 
 const addAdmin = () => {
   const [showOptions, setShowOptions] = useState(false);
+  const [companies , setCompanies] = useState([])
+  const [Data , setData] = useState({
+    name : '',
+    phone : '',
+    email : '',
+    password : '',
+    companyId: '',
+  })
+
+
+  const handleChange = (e) =>{
+    const {name , value} = e.target;
+    setData({
+      ...Data,
+      [name] : value,
+    })
+  }
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(Data)
+    axiosInstance.post('/signup',Data)
+    .then((res) =>{
+      alert('New Admin added successfully')
+      setData({
+        name : '',
+        phone : '',
+        email : '',
+        password : '',
+        companyId : '',
+      })
+      
+    })
+    .catch((err) =>{
+      alert(`Faild to add Admin : ${err.response.data.message}`)      
+
+    })
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -16,6 +72,20 @@ const addAdmin = () => {
   const handleMouseLeave = () => {
     setShowOptions(false);
   };
+  
+  useEffect(() =>{
+    axiosInstance.get('/getallcompanies')
+    .then((res) =>{
+      console.log(res.data)
+      console.log('from register Admin')
+      setCompanies(res.data)
+    })
+    .catch((err) =>{
+    console.log(err)
+    })
+    
+  },[])
+
 
   return (
     <>
@@ -78,9 +148,13 @@ const addAdmin = () => {
         {/* Form Section */}
         <div className={classNames("row justify-content-center mt-5")}>
           <div className={classNames("col-md-auto")}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className={classNames("form-group")}>
                 <input
+                    name='name'
+                    id="name"
+                    value={Data.name}
+                    onChange={handleChange}
                   type="text"
                   className={classNames(
                     "form-control",
@@ -91,6 +165,10 @@ const addAdmin = () => {
                 />
              
                 <input
+                    name='email'
+                    id="email"
+                    value={Data.email}
+                    onChange={handleChange}
                   type="email"
                   className={classNames(
                     "form-control",
@@ -102,6 +180,10 @@ const addAdmin = () => {
                   
 
                 <input
+                    name='password'
+                    id="password"
+                    value={Data.password}
+                    onChange={handleChange}
                   type="password"
                   className={classNames(
                     "form-control",
@@ -110,16 +192,11 @@ const addAdmin = () => {
                   )}
                   placeholder="Password"
                 />
-              <input
-                  type="text"
-                  className={classNames(
-                    "form-control",
-                    Style.customInput,
-                    "mb-3"
-                  )}
-                  placeholder="Company Name"
-                />
                  <input
+                  name='phone'
+                  id="phone"
+                  value={Data.phone}
+                  onChange={handleChange}
                   type="text"
                   className={classNames(
                     "form-control",
@@ -130,16 +207,24 @@ const addAdmin = () => {
                 />
                 {/* Option Input */}
                 <select
+                 name='companyId'
+                 id="companyId"
+                 value={Data.companyId}
+                 onChange={handleChange}
                   className={classNames(
                     "form-control",
                     Style.customInput,
                     "mb-3"
                   )}
                 >
-                  <option value="">Plane </option>
-                  <option value="Plan1">Plan 1 </option>
-                  <option value="Plan2">Plan 2 </option>
-                  <option value="Plan3">Plan 3 </option>
+                  <option value="">Company </option>
+                  {companies?.map((comp) => (
+                  <option key={comp._id} value={comp._id}>
+                    {comp.companyName}
+                  </option>
+                ))}
+                                
+         
 
                 </select>
                 {/* Select Input */}

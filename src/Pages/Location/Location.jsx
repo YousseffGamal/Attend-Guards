@@ -6,11 +6,65 @@ import profileImg from "../../assets/images/Group 1653.png";
 import Navbar from '../../component/navbar/navbar';
 import classNames from "classnames";
 import { Link } from "react-router-dom";
-
+import { useAuth } from '../../store/authContext';
+import axiosInstance from "../../axios";
 const Location = () => {
+  const {auth } = useAuth();
   const [showOptions, setShowOptions] = useState(false);
-  const [name, setName] = useState('');
-  const [range, setRange] = useState(0); // Initialize range with 0
+  const [errorMessage, setErrorMessage] = useState([]); // For error message
+  const [Data , setData] = useState({
+    locationName : '',
+    radius : '',
+    latitude:37.7749,
+    longitude:-122.4194,
+    companyId : auth.companyId,
+  })
+
+
+  
+  const handleChange = (e) =>{
+    const {name , value} = e.target;
+    setData({
+      ...Data,
+      [name] : value,
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(!Data.locationName){
+      alert('No Location choosed')
+      setErrorMessage(['No Location choosed'])
+    }
+    if(!Data.radius){
+      alert('No radius choosed')
+      setErrorMessage(['No radius Addeds'])
+    }
+    if(Data.locationName && Data.radius){
+      axiosInstance.post('/createLocation',Data)
+      .then((res) =>{
+        alert('New Location added successfully')
+        setData({
+          locationName : '',
+          radius : '',
+          latitude:'',
+          longitude:'',
+          companyId : auth.companyId,
+        })
+        
+      })
+      .catch((err) =>{
+        alert(`Faild to add Location : ${err.response.data.message}`)      
+  
+      })
+  
+    } 
+      
+   
+  };
+
+
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -113,44 +167,72 @@ const Location = () => {
         ></iframe>
       </div>
 
+
+
+
+
+
+
+
+
+
+
+      <form   onSubmit={handleSubmit}>
+
+
+
+
+
+
       {/* Name and Range Inputs */}
       <div className={classNames("container", "mb-3", Style.customInputs)}>
         <div className="row justify-content-center">
-          <div className="col-md-4 mb-3">
-            <div className="input-group">
-              <div className="input-group-prepend">
-                <span className="input-group-text">
-                  <FaUser style={{fontSize:"1.5rem"}} />
-                </span>
-              </div>
-              <input
+        <div className="col-md-4 mb-3">
+        <input
                 type="text"
                 className="form-control"
                 placeholder="Name"
-                value={name}
-                onChange={handleNameChange}
+                name="locationName"
+                value={Data.locationName}
+                onChange={handleChange}
               />
-            </div>
-          </div>
-          
+                </div>
+
+
           <div className="col-md-4 mb-3">
+          <input
+                type="number"
+                className="form-control"
+                placeholder="Range in kilo"
+                name="radius"
+                value={Data.radius}
+                onChange={handleChange}
+              />
+          </div>
+
+       
+          <button type="submit" class="btn btn-primary">Submit</button>
+
+          
+          {/* <div className="col-md-4 mb-3">
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">
                   <FaRuler style={{fontSize:"1.5rem"}}  />
                 </span>
               </div>
-              <input
-                type="number"
-                className="form-control"
-                placeholder="Range in meter"
-
-                onChange={handleRangeChange}
-              />
+         
             </div>
-          </div>
+          </div> */}
+
+
         </div>
       </div>
+      
+      </form>
+
+
+
 
       <Navbar activeIcon="map" />
     </>
