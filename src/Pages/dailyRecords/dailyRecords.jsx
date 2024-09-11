@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { FaUser } from "react-icons/fa";
 import Style from "./dailyRecords.module.css";
@@ -8,13 +8,15 @@ import classNames from "classnames";
 import { Modal, Button } from "react-bootstrap"; // Import Bootstrap modal components
 import { Link } from "react-router-dom";
 import Vector from "../../assets/images/Vector.png";
-
+import { useParams } from 'react-router-dom';
+import axiosInstance from "../../axios";
 const EmployeesRecord = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [showExportBtn, setShowExportBtn] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false); // State for showing export modal
+  const { employeeId } = useParams();
 
   const handleMouseEnter = () => {
     setShowOptions(true);
@@ -66,9 +68,25 @@ const EmployeesRecord = () => {
     { day: "Wed, 1/5", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
     { day: "Wed, 1/5", hours: "10:00 AM - 6:00 PM", period: "1/5 : 21/5" },
   ];
+  const [empRecords,setEmpRecords] = useState([])
 
+  useEffect(() =>{
+
+    axiosInstance.get(`/get_attendance/${employeeId}`)
+    .then((res) =>{
+      console.log(res.data.AllAttendanceForAnEmployee)
+      console.log('from emp records')
+      setEmpRecords(res.data.AllAttendanceForAnEmployee)
+    })
+    .catch((err) =>{
+    console.log(err)
+    })
+    
+
+  },[])
   return (
     <>
+  
       <div>
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
@@ -77,7 +95,8 @@ const EmployeesRecord = () => {
                 Attend Guards
               </h1>
               <p className={classNames(Style.attendSuptitle, "text-center")}>
-              Frank’s Daily Records
+              {empRecords[0]?.employee_id.name}’s Daily Records
+
               </p>
             </div>
             <div
@@ -144,7 +163,7 @@ const EmployeesRecord = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((row, index) => (
+              {empRecords.map((row, index) => (
                 <tr key={index}>
                   <td>
                     <input
@@ -153,9 +172,45 @@ const EmployeesRecord = () => {
                       onChange={() => handleRowSelect(index)}
                     />
                   </td>
-                  <td>{row.day}</td>
-                  <td style={{ textAlign: "center" }}>{row.hours}</td>
-                  <td style={{ textAlign: "right" }}>{row.period}</td>
+                  <td>
+                  {(() => {
+                    const date = new Date(row.createdAt);
+
+                    // Get the day of the week (e.g., 'Wed')
+                    const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'short' });
+
+                    // Get the month/day in "M/D" format (e.g., '9/10')
+                    const monthDay = date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' });
+
+                    // Return the formatted date (e.g., 'Wed, 9/10')
+                    return `${dayOfWeek}, ${monthDay}`;
+                  })()}
+                </td>
+                  <td style={{ textAlign: "center" }}>{row.duration}</td>
+                  <td style={{ textAlign: "right" }}>
+                  {(() => {
+    // Convert check_in_time to a Date object
+    const checkInDate = new Date(row.check_in_time);
+    const checkOutDate = new Date(row.check_out_time);
+
+    // Format check_in_time to "H:MM AM/PM" (e.g., '7:00 AM')
+    const checkInFormatted = checkInDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+
+    // Format check_out_time to "H:MM AM/PM" (e.g., '5:00 PM')
+    const checkOutFormatted = checkOutDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+
+    // Return the formatted string with both times
+    return `${checkInFormatted} - ${checkOutFormatted}`;
+  })()}
+                    </td>
                 
                 </tr>
               ))}

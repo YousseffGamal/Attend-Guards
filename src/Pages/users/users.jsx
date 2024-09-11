@@ -196,7 +196,7 @@ const Users = () => {
                   <td>{employee.email}</td>
                   <td>{employee.role}</td>
                   <td>
-                    <Link to="/dailyrecords">
+                    <Link to={`/dailyrecords/${employee._id}`}>
                       <img src={Vector} alt="Navigate" />
                     </Link>
                   </td>

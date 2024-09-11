@@ -8,10 +8,8 @@ export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     token: localStorage.getItem("token") || "",
     user: JSON.parse(localStorage.getItem("user")) || null,
-    companyId: JSON.parse(localStorage.getItem("companyId")) || null,
-    
-    
-    
+    companyId: localStorage.getItem("companyId") || null,
+
   });
 
   const login = async (cred) => {
