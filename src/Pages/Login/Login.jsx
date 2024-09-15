@@ -34,7 +34,7 @@ const Login = () => {
       const response = await login(formData); // Assuming login() returns a promise
       if (response.success) {
        
-      navigate('/employeesrecords') // Redirect after success
+      navigate('/users') // Redirect after success
       } else {
         setErrorMessage(response.message); // Display error message
         setSuccessMessage(''); // Clear success message
