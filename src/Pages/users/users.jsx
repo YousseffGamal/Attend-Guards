@@ -1,30 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios"; // Import axios (this is correct if you don't have an axiosInstance)
+import axios from "axios";
 import Style from "./users.module.css";
 import Vector from "../../assets/images/Vector.png";
 import profileImg from "../../assets/images/Group 1653.png";
 import Navbar from "../../component/navbar/navbar";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import { FaUser } from "react-icons/fa";
-import { Modal, Button } from "react-bootstrap"; // Import Bootstrap modal components
+import { FaUser, FaEdit, FaSave } from "react-icons/fa"; // Added FaEdit and FaSave icons
+import { Modal, Button, Form } from "react-bootstrap"; // Import Form
+import SaveIcon from '@mui/icons-material/Save'; // Using MUI Save icon
 
 const Users = () => {
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
   const [showExportBtn, setShowExportBtn] = useState(false);
-  const [showExportModal, setShowExportModal] = useState(false); // State for showing export modal
-  const [employees, setEmployees] = useState([]); // State for storing employee data
-  const [loading, setLoading] = useState(true); // State for loading status
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [showSaveConfirmationModal, setShowSaveConfirmationModal] = useState(false);
+
+  // Fetch companyId from localStorage or other source
+  const companyId = localStorage.getItem('companyId'); // Adjust as needed
 
   useEffect(() => {
     // Fetch employee data from the API using axios
     const fetchEmployees = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/getallemployees"); // Replace with your actual API endpoint
-        setEmployees(response.data.AllEmployees); // Update state with fetched data
+        const response = await axios.get(`http://localhost:3000/employees/company/${companyId}`);
+        setEmployees(response.data.employees); // Update state with fetched data
         setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Error fetching employees:", error);
@@ -32,15 +39,18 @@ const Users = () => {
       }
     };
 
-    fetchEmployees();
-  }, []);
+    if (companyId) {
+      fetchEmployees();
+    } else {
+      setLoading(false); // Set loading to false if companyId is not available
+    }
+  }, [companyId]);
 
-  // Delete function using axios
   const handleDelete = async (id) => {
     const confirmed = window.confirm("Are you sure you want to delete this employee?");
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3000/deleteemployee/${id}`); // Use axios.delete
+        await axios.delete(`http://localhost:3000/deleteemployee/${id}`);
         setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee._id !== id));
         alert("Employee deleted successfully.");
       } catch (error) {
@@ -50,21 +60,13 @@ const Users = () => {
     }
   };
 
-  const handleMouseEnter = () => {
-    setShowOptions(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowOptions(false);
-  };
-
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     const updatedSelectedRows = {};
     if (!selectAll) {
-      for (let i = 0; i < employees.length; i++) {
-        updatedSelectedRows[i] = true;
-      }
+      employees.forEach((_, index) => {
+        updatedSelectedRows[index] = true;
+      });
     }
     setSelectedRows(updatedSelectedRows);
     updateExportBtnState(updatedSelectedRows);
@@ -81,28 +83,56 @@ const Users = () => {
     setShowExportBtn(anySelected);
   };
 
-  // Show modal when clicking Export
   const handleExport = () => {
     setShowExportModal(true); // Show export modal
   };
 
-  // Confirm export inside the modal
   const handleConfirmExport = () => {
-    // Handle your export logic here
     console.log("Exporting selected rows:", selectedRows);
-
-    // Close the modal after export
-    setShowExportModal(false);
+    setShowExportModal(false); // Close the modal after export
   };
 
-  const handleProfileClick = (index) => {
-    alert(`Opening profile for user at index: ${index}`);
-    // You can replace this with the actual logic to open the user's profile
+  const handleEdit = (employee) => {
+    setSelectedEmployee(employee);
+    setShowEditModal(true); // Show edit modal
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setSelectedEmployee((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const { _id, username, phone, email, companyId, locationId } = selectedEmployee;
+      const updatedEmployeeData = { username, phone, email, companyId, locationId };
+
+      await axios.patch(`http://localhost:3000/updateemployee/${_id}`, updatedEmployeeData);
+
+      // Update the employee in the local state
+      setEmployees((prevEmployees) =>
+        prevEmployees.map((employee) =>
+          employee._id === _id ? { ...employee, ...updatedEmployeeData } : employee
+        )
+      );
+      setShowEditModal(false);
+      setShowSaveConfirmationModal(true); // Show save confirmation modal
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        console.error("Email or phone already exists:", error.response.data.message);
+      } else {
+        console.error("Error updating employee:", error);
+      }
+    }
   };
 
   if (loading) {
     return <p>Loading...</p>;
   }
+  if (employees.length === 0) return <div>No employees found</div>;
 
   return (
     <>
@@ -110,17 +140,13 @@ const Users = () => {
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
             <div className={classNames("col")}>
-              <h1 className={classNames(Style.attendTitle, "text-center")}>
-                Attend Guards
-              </h1>
-              <p className={classNames(Style.attendSuptitle, "text-center")}>
-                Employees
-              </p>
+              <h1 className={classNames(Style.attendTitle, "text-center")}>Attend Guards</h1>
+              <p className={classNames(Style.attendSuptitle, "text-center")}>Employees</p>
             </div>
             <div
               className={classNames("col-auto")}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={() => setShowOptions(true)}
+              onMouseLeave={() => setShowOptions(false)}
               style={{ position: "relative" }}
             >
               <img
@@ -142,19 +168,11 @@ const Users = () => {
                     zIndex: 1,
                   }}
                 >
-                  <ul
-                    style={{
-                      listStyleType: "none",
-                      padding: "10px",
-                      margin: "0",
-                    }}
-                  >
+                  <ul style={{ listStyleType: "none", padding: "10px", margin: "0" }}>
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       <Link to="/ProfilePage">Profile</Link>
                     </li>
-                    <li style={{ padding: "5px 10px", cursor: "pointer" }}>
-                      Logout
-                    </li>
+                    <li style={{ padding: "5px 10px", cursor: "pointer" }}>Logout</li>
                   </ul>
                 </div>
               )}
@@ -167,11 +185,7 @@ const Users = () => {
             <thead>
               <tr>
                 <th>
-                  <input
-                    type="checkbox"
-                    checked={selectAll}
-                    onChange={handleSelectAll}
-                  />
+                  <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
                 </th>
                 <th>NAME</th>
                 <th>USERNAME</th>
@@ -201,12 +215,10 @@ const Users = () => {
                     </Link>
                   </td>
                   <td>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(employee._id)}     
-                    >
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(employee._id)}>
                       Delete
                     </button>
+                    <FaEdit onClick={() => handleEdit(employee)} style={{ cursor: "pointer", marginLeft: "10px" }} />
                   </td>
                 </tr>
               ))}
@@ -225,22 +237,99 @@ const Users = () => {
         {/* Export Modal */}
         <Modal show={showExportModal} onHide={() => setShowExportModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Export Selected Rows</Modal.Title>
+            <Modal.Title>Export Data</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>Are you sure you want to export the selected rows?</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowExportModal(false)}>
-              Cancel
+              Close
             </Button>
-            <Button variant="primary" onClick={handleConfirmExport}> {/* Use handleConfirmExport here */}
+            <Button variant="primary" onClick={handleConfirmExport}>
               Export
             </Button>
           </Modal.Footer>
         </Modal>
 
-        <Navbar activeIcon="users" />
+        {/* Edit Modal */}
+        <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Edit Employee</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="username"
+                  value={selectedEmployee?.username || ""}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Phone</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="phone"
+                  value={selectedEmployee?.phone || ""}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  id="email"
+                  value={selectedEmployee?.email || ""}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Company ID</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="companyId"
+                  value={selectedEmployee?.companyId || ""}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Location ID</Form.Label>
+                <Form.Control
+                  type="text"
+                  id="locationId"
+                  value={selectedEmployee?.locationId || ""}
+                  onChange={handleInputChange}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowEditModal(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSaveChanges}>
+              <FaSave style={{ marginRight: "5px" }} /> Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        {/* Save Confirmation Modal */}
+        <Modal show={showSaveConfirmationModal} onHide={() => setShowSaveConfirmationModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Save Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Employee details updated successfully.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowSaveConfirmationModal(false)}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </>
   );

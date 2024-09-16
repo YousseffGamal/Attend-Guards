@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
     companyId: localStorage.getItem("companyId") || null,
 
   });
-
+  // const companyId = localStorage.getItem("companyId");
   const login = async (cred) => {
     try {
       const { data } = await axiosInstance.post("/signin", cred);

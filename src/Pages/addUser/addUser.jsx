@@ -191,7 +191,7 @@ const AddUser = () => {
                     "mb-3"
                   )}
                 >
-                  <option value="">Select Role</option>
+                  <option value="">Select Location</option>
                   <option value="admin">Admin</option>
                   <option value="employee">Employee</option>
                 </select>
