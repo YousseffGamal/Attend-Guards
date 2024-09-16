@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from '../../store/authContext';
 import axiosInstance from "../../axios";
 const Location = () => {
-  const {auth } = useAuth();
+  const {auth ,logout} = useAuth();
   const [showOptions, setShowOptions] = useState(false);
   const [errorMessage, setErrorMessage] = useState([]); // For error message
   const [Data , setData] = useState({
@@ -131,7 +131,7 @@ const Location = () => {
                     Profile 
                     </Link>
                   </li>
-                  <li style={{ padding: "5px 10px", cursor: "pointer" }}>
+                  <li style={{ padding: "5px 10px", cursor: "pointer" }} onClick={logout}>
                     Logout
                   </li>
                 </ul>
@@ -141,20 +141,7 @@ const Location = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
-      <div className={classNames(Style.searchBarContainer)}>
-        <form className={classNames("d-flex", "justify-content-center", "mb-3")}>
-          <div className="input-group" style={{ maxWidth: '600px', width: '100%' }}>
-            <input type="text" className="form-control" placeholder="Search location" />
-            <div className="input-group-append">
-              <button className="btn btn-primary" type="button">
-                <FaSearch />
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
+  
       {/* Responsive Map */}
       <div className={classNames(Style.mapContainer)}>
         <iframe

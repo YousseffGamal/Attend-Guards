@@ -1,14 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import AddEmployee from "./Pages/Add Employee/Add Employee";
-import EmployeesRecords from "./Pages/employeesRecord/employeesRecord"; 
 import DailyRecords from "./Pages/dailyRecords/dailyRecords";
 import Login from "./Pages/Login/Login";
 import SetLocation from "./Pages/Location/Location";
 import Users from "./Pages/users/users";
 import ProfilePage from "./Pages/profile/profile";
 import Adduser from "./Pages/addUser/addUser";
-import AddAdmin from "./Pages/addAdmin/addAdmin";
+import ViewLocation from "./Pages/ViewLocation/ViewLocation";
+
 import ProtectedRoute from './utiliteis/protectedRoute';
 // 
 const ProjectRoutes = () => {
@@ -17,21 +17,20 @@ const ProjectRoutes = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          {/* <Route path="/AddEmployee" element={<AddEmployee />} /> */}
+         
+          <Route element={<ProtectedRoute redirectTo="/" />}>
 
-          {/* <Route element={<ProtectedRoute redirectTo="/" />}> */}
-
-
-          <Route path="/dailyrecords/:employeeId" element={<DailyRecords />} />
-          {/* <Route path="/employeesrecords" element={<EmployeesRecords />} /> */}
-          <Route path="/setlocation" element={<SetLocation />} />
-          <Route path="/users" element={<Users />} />
           <Route path="/profilepage" element={<ProfilePage />} />
+          <Route path="/setlocation" element={<SetLocation />} />
+
+          <Route path="/ViewLocation" element={<ViewLocation />} />
+       
           <Route path="/adduser" element={<Adduser />} />
-          <Route path="/addadmin" element={<AddAdmin />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/dailyrecords/:employeeId" element={<DailyRecords />} />
 
 
-          {/* </Route> */}
+          </Route>
 
         </Routes>
       </Router>

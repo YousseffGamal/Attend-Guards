@@ -15,8 +15,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (cred) => {
     try {
       const { data } = await axiosInstance.post("/signin", cred);
-      console.log(data);
-      console.log('from login ');
+  
      
       setAuth({
         token: data.token,
@@ -36,17 +35,22 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setAuth({ token: "", user: null, permissions: [] }); // Reset permissions state
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("companyId"); 
+    axiosInstance.post('logout')
+    .then((res) =>{
+      setAuth({ token: "", user: null,companyId:'' }); // Reset permissions state
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("companyId")
+    })
+    .catch((err) =>{
+      setAuth({ token: "", user: null,companyId:'' }); // Reset permissions state
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("companyId")
+    })
+  ; 
     
   };
-
-  const hasPermissions = (permissionNames) =>{
-    return permissionNames.some(permission => auth.permissions.includes(permission))
-  }
-
 
   useEffect(() => {
     const interceptor = axiosInstance.interceptors.response.use(
@@ -66,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout,hasPermissions }}>
+    <AuthContext.Provider value={{ auth, login, logout}}>
       {children}
     </AuthContext.Provider>
   );

@@ -10,47 +10,49 @@ import classNames from "classnames";
 import { FaUser, FaEdit, FaSave } from "react-icons/fa"; // Added FaEdit and FaSave icons
 import { Modal, Button, Form } from "react-bootstrap"; // Import Form
 import SaveIcon from '@mui/icons-material/Save'; // Using MUI Save icon
-
+import { useAuth } from '../../store/authContext';
+import axiosInstance from "../../axios";
 const Users = () => {
+  const { auth,logout } = useAuth();
   const [showOptions, setShowOptions] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
-  const [selectedRows, setSelectedRows] = useState({});
-  const [showExportBtn, setShowExportBtn] = useState(false);
-  const [showExportModal, setShowExportModal] = useState(false);
+  const [CompanyLocations, setCompanyLocations] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const [showEditModal, setShowEditModal] = useState(false);
+
+  
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showSaveConfirmationModal, setShowSaveConfirmationModal] = useState(false);
-
-  // Fetch companyId from localStorage or other source
-  const companyId = localStorage.getItem('companyId'); // Adjust as needed
-
+  const fetchEmployees = async () => {
+    try {
+      const response = await axiosInstance.get(`http://localhost:3000/employees/company/${auth.companyId}`);
+      
+      setEmployees(response.data.employees); // Update state with fetched data
+      setLoading(false); // Set loading to false after data is fetched
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      setLoading(false); // Set loading to false even on error
+    }
+  };
   useEffect(() => {
     // Fetch employee data from the API using axios
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3000/employees/company/${companyId}`);
-        setEmployees(response.data.employees); // Update state with fetched data
-        setLoading(false); // Set loading to false after data is fetched
-      } catch (error) {
-        console.error("Error fetching employees:", error);
-        setLoading(false); // Set loading to false even on error
-      }
-    };
+   
 
-    if (companyId) {
+    if (auth.companyId) {
       fetchEmployees();
     } else {
       setLoading(false); // Set loading to false if companyId is not available
     }
-  }, [companyId]);
+  }, [auth.companyId]);
+
+
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm("Are you sure you want to delete this employee?");
     if (confirmed) {
       try {
-        await axios.delete(`http://localhost:3000/deleteemployee/${id}`);
+        await axios.delete(`http://localhost:3000/deleteemployee/${id}/${auth.companyId}`);
         setEmployees((prevEmployees) => prevEmployees.filter((employee) => employee._id !== id));
         alert("Employee deleted successfully.");
       } catch (error) {
@@ -60,39 +62,10 @@ const Users = () => {
     }
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const updatedSelectedRows = {};
-    if (!selectAll) {
-      employees.forEach((_, index) => {
-        updatedSelectedRows[index] = true;
-      });
-    }
-    setSelectedRows(updatedSelectedRows);
-    updateExportBtnState(updatedSelectedRows);
-  };
 
-  const handleRowSelect = (index) => {
-    const updatedSelectedRows = { ...selectedRows, [index]: !selectedRows[index] };
-    setSelectedRows(updatedSelectedRows);
-    updateExportBtnState(updatedSelectedRows);
-  };
-
-  const updateExportBtnState = (rows) => {
-    const anySelected = Object.values(rows).some((isSelected) => isSelected);
-    setShowExportBtn(anySelected);
-  };
-
-  const handleExport = () => {
-    setShowExportModal(true); // Show export modal
-  };
-
-  const handleConfirmExport = () => {
-    console.log("Exporting selected rows:", selectedRows);
-    setShowExportModal(false); // Close the modal after export
-  };
 
   const handleEdit = (employee) => {
+    getLocations()
     setSelectedEmployee(employee);
     setShowEditModal(true); // Show edit modal
   };
@@ -106,28 +79,37 @@ const Users = () => {
   };
 
   const handleSaveChanges = async () => {
-    try {
-      const { _id, username, phone, email, companyId, locationId } = selectedEmployee;
-      const updatedEmployeeData = { username, phone, email, companyId, locationId };
-
-      await axios.patch(`http://localhost:3000/updateemployee/${_id}`, updatedEmployeeData);
-
-      // Update the employee in the local state
-      setEmployees((prevEmployees) =>
-        prevEmployees.map((employee) =>
-          employee._id === _id ? { ...employee, ...updatedEmployeeData } : employee
-        )
-      );
-      setShowEditModal(false);
-      setShowSaveConfirmationModal(true); // Show save confirmation modal
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        console.error("Email or phone already exists:", error.response.data.message);
-      } else {
-        console.error("Error updating employee:", error);
-      }
-    }
+      await axiosInstance.patch(`http://localhost:3000/updateemployee/${selectedEmployee._id}`, selectedEmployee)
+      .then((res) =>{
+        fetchEmployees()
+        setShowEditModal(false);
+        setShowSaveConfirmationModal(true); 
+      console.log(res.data)
+      })
+      .catch((err) =>{
+      console.error(err.response.data.message);
+      console.log(err)
+      })
   };
+
+  const getLocations = () =>{
+
+    axiosInstance.get(`/getLocationsByCompany/${auth.companyId}`)
+    .then((res) =>{
+      console.log(res.data.Locations)
+    setCompanyLocations(res.data.Locations)
+    })
+    .catch((err) =>{
+    console.log(err)
+    })
+  }
+
+  useEffect(() => {
+
+    getLocations()
+ 
+    
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -172,7 +154,7 @@ const Users = () => {
                     <li style={{ padding: "5px 10px", cursor: "pointer" }}>
                       <Link to="/ProfilePage">Profile</Link>
                     </li>
-                    <li style={{ padding: "5px 10px", cursor: "pointer" }}>Logout</li>
+                    <li style={{ padding: "5px 10px", cursor: "pointer" }} onClick={logout}>Logout</li>
                   </ul>
                 </div>
               )}
@@ -185,12 +167,12 @@ const Users = () => {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                  ID
                 </th>
                 <th>NAME</th>
-                <th>USERNAME</th>
                 <th>EMAIL</th>
-                <th>ROLES</th>
+                <th>PHONE</th>
+                <th>LOCATION</th>
                 <th>RECORDS</th>
                 <th>ACTION</th>
               </tr>
@@ -199,26 +181,29 @@ const Users = () => {
               {employees.map((employee, index) => (
                 <tr key={employee._id}>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedRows[index] || false}
-                      onChange={() => handleRowSelect(index)}
-                    />
+                  {index +1 }
                   </td>
                   <td>{employee.name || "N/A"}</td>
-                  <td>{employee.username}</td>
                   <td>{employee.email}</td>
-                  <td>{employee.role}</td>
+                  <td>{employee.phone }</td>
+                  <td>{employee.locationId.locationName }</td>
                   <td>
                     <Link to={`/dailyrecords/${employee._id}`}>
                       <img src={Vector} alt="Navigate" />
                     </Link>
                   </td>
                   <td>
+                  <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => handleEdit(employee)}     
+                    >
+                      update
+                    </button>
                     <button className="btn btn-danger btn-sm" onClick={() => handleDelete(employee._id)}>
                       Delete
                     </button>
-                    <FaEdit onClick={() => handleEdit(employee)} style={{ cursor: "pointer", marginLeft: "10px" }} />
+                  
+                    {/* <FaEdit onClick={() => handleEdit(employee)} style={{ cursor: "pointer", marginLeft: "10px" }} /> */}
                   </td>
                 </tr>
               ))}
@@ -226,31 +211,8 @@ const Users = () => {
           </table>
         </div>
 
-        {showExportBtn && (
-          <div className="text-center">
-            <button className="btn btn-primary" onClick={handleExport}>
-              Export Selected
-            </button>
-          </div>
-        )}
+       
 
-        {/* Export Modal */}
-        <Modal show={showExportModal} onHide={() => setShowExportModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Export Data</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>Are you sure you want to export the selected rows?</p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowExportModal(false)}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleConfirmExport}>
-              Export
-            </Button>
-          </Modal.Footer>
-        </Modal>
 
         {/* Edit Modal */}
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
@@ -260,11 +222,11 @@ const Users = () => {
           <Modal.Body>
             <Form>
               <Form.Group className="mb-3">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>Name</Form.Label>
                 <Form.Control
                   type="text"
-                  id="username"
-                  value={selectedEmployee?.username || ""}
+                  id="name"
+                  value={selectedEmployee?.name || ""}
                   onChange={handleInputChange}
                 />
               </Form.Group>
@@ -286,24 +248,32 @@ const Users = () => {
                   onChange={handleInputChange}
                 />
               </Form.Group>
+           
               <Form.Group className="mb-3">
-                <Form.Label>Company ID</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="companyId"
-                  value={selectedEmployee?.companyId || ""}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Location ID</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="locationId"
-                  value={selectedEmployee?.locationId || ""}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
+              <Form.Label>Location</Form.Label>
+              <select
+                 name='locationId'
+                 id="locationId"
+                value={selectedEmployee?.locationId._id}
+                onChange={handleInputChange}
+                className={classNames(
+                    "form-control",
+                    Style.customInput,
+                    "mb-3"
+                  )}
+                >
+                  <option value="">Locations </option>
+                  {CompanyLocations?.map((loc) => (
+                  <option key={loc._id} value={loc._id}>
+                    {loc.locationName}
+                  </option>
+                ))}
+                 </select>
+                 </Form.Group>
+
+
+
+             
             </Form>
           </Modal.Body>
           <Modal.Footer>
@@ -331,7 +301,7 @@ const Users = () => {
           </Modal.Footer>
         </Modal>
       </div>
-      <Navbar activeIcon="plus" />
+      <Navbar activeIcon="users" />
     
     </>
   );

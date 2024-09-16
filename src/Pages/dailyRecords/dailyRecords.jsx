@@ -10,7 +10,9 @@ import { Link } from "react-router-dom";
 import Vector from "../../assets/images/Vector.png";
 import { useParams } from 'react-router-dom';
 import axiosInstance from "../../axios";
+import { useAuth } from '../../store/authContext';
 const EmployeesRecord = () => {
+  const { auth ,logout} = useAuth();
   const [showOptions, setShowOptions] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedRows, setSelectedRows] = useState({});
@@ -136,7 +138,7 @@ const EmployeesRecord = () => {
                     Profile 
                     </Link>
                     </li>
-                    <li style={{ padding: "5px 10px", cursor: "pointer" }}>
+                    <li style={{ padding: "5px 10px", cursor: "pointer" }}onClick={logout} >
                       Logout
                     </li>
                   </ul>

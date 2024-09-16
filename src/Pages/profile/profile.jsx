@@ -6,14 +6,45 @@ import classNames from "classnames";
 import Style from "./profile.module.css";
 import profileImgs from "../../assets/images/image.png"; // Example profile image
 import { Modal, Button } from "react-bootstrap";
+import { useAuth } from '../../store/authContext';
+import axiosInstance from "../../axios";
+
 
 const ProfilePage = () => {
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [name, setName] = useState("Faisal Mohammed");
+
+  const { auth } = useAuth();   
+  const [name, setName] = useState(auth.user.name);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  
+
   const [profileImage, setProfileImage] = useState(profileImgs); // Initial profile image
   const [newProfileImage, setNewProfileImage] = useState(null); // State to hold newly uploaded image
+
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const validatePass = () =>{
+    if(!password || !confirmPassword || password != confirmPassword ){
+      alert('Ensure both passwords match in both fields')
+      return
+    } else {
+      changePassword(password)
+    }
+   
+  }
+  const changePassword = async(newPassword) =>{
+    try {
+      await axiosInstance.patch(`changepassword/${auth.user._id}`,{newPassword}) 
+      console.log(newPassword)
+      alert('password changed successfully')
+      setShowEditModal(false);
+      setPassword('')
+      setConfirmPassword('')
+    } catch (error) {
+      alert(error.response.data.message)
+    }
+    
+  }
 
   const handleEditClick = () => {
     setShowEditModal(true);
@@ -25,14 +56,8 @@ const ProfilePage = () => {
 
   const handleSaveChanges = () => {
     // Logic for saving changes, like updating the profile image
-    if (newProfileImage) {
-      setProfileImage(newProfileImage);
-      setNewProfileImage(null); // Clear new image state
-    }
-    console.log("Name:", name);
-    console.log("Password:", password);
-    console.log("Confirm Password:", confirmPassword);
-    setShowEditModal(false);
+    validatePass()
+    
   };
 
   const handleImageUpload = (e) => {
@@ -56,33 +81,15 @@ const ProfilePage = () => {
         <div className={classNames("d-flex", "align-items-center", "mt-3")}>
           <div style={{ position: "relative" }}>
             <img src={newProfileImage || profileImage} alt="Profile" style={{ width: "227px", height: "227px", borderRadius: "50%" }} />
-            <label htmlFor="imageUpload" style={{ position: "absolute", bottom: "10px", right: "10px" }}>
-              <FaUserEdit size={24} style={{ cursor: "pointer", color: "#466EFA" }} />
-            </label>
           </div>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleImageUpload}
-          />
+       
         </div>
-        {newProfileImage && (
-          <div className="mt-2 text-center">
-            <Button variant="primary" size="sm" onClick={handleSaveChanges} className="mr-2">
-              Save
-            </Button>
-            <Button variant="secondary" size="sm" onClick={() => setNewProfileImage(null)}>
-              Cancel
-            </Button>
-          </div>
-        )}
+    
         <div className={classNames("text-center", "mt-3")}>
           <p style={{ margin: "0" }} className={classNames(Style.userName)}>
-            @faisalmohammed
+            @{auth.user.email.split('@')[0]}
           </p>
-          <p className={classNames(Style.role)}>Graphic Designer</p>
+          <p className={classNames(Style.role)}>Admin</p>
         </div>
         <div className={classNames("mt-3")}>
           <p className={classNames(Style.rem)} >
@@ -99,7 +106,7 @@ const ProfilePage = () => {
               Email:
             </strong>
             <span className={classNames(Style.light)} style={{ color: "#23303B", fontSize: "31px" }}>
-              faisalmohammed@gmail.com
+              {auth.user.email}
             </span>
           </p>
         </div>
@@ -119,7 +126,7 @@ const ProfilePage = () => {
               id="editName"
               className="form-control"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              disabled
             />
           </div>
           <div className="form-group">
