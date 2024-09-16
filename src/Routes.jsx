@@ -23,7 +23,7 @@ const ProjectRoutes = () => {
 
 
           <Route path="/dailyrecords/:employeeId" element={<DailyRecords />} />
-          <Route path="/employeesrecords" element={<EmployeesRecords />} />
+          {/* <Route path="/employeesrecords" element={<EmployeesRecords />} /> */}
           <Route path="/setlocation" element={<SetLocation />} />
           <Route path="/users" element={<Users />} />
           <Route path="/profilepage" element={<ProfilePage />} />
