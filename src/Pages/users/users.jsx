@@ -331,6 +331,8 @@ const Users = () => {
           </Modal.Footer>
         </Modal>
       </div>
+      <Navbar activeIcon="plus" />
+    
     </>
   );
 };
