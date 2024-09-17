@@ -7,7 +7,7 @@ import profileImg from "../../assets/images/Group 1653.png";
 import Navbar from "../../component/navbar/navbar";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
-import { FaUser, FaEdit, FaSave } from "react-icons/fa"; // Added FaEdit and FaSave icons
+import { FaUser, FaEdit, FaSave,FaArrowLeft,FaArrowRight,FaAngleDoubleRight,FaAngleDoubleLeft } from "react-icons/fa"; // Added FaEdit and FaSave icons
 import { Modal, Button, Form } from "react-bootstrap"; // Import Form
 import SaveIcon from '@mui/icons-material/Save'; // Using MUI Save icon
 import { useAuth } from '../../store/authContext';
@@ -24,10 +24,25 @@ const Users = () => {
   
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showSaveConfirmationModal, setShowSaveConfirmationModal] = useState(false);
-  const fetchEmployees = async () => {
+
+  const pagination = (i) =>{
+       if(i > lastPage || i < 1){
+        return
+    }
+    fetchEmployees(i)
+  }
+  const [lastPage ,setLastPage] =useState('')
+  const [currentPage , setCurrentPage] = useState('');
+  
+
+
+
+  const fetchEmployees = async (i) => {
     try {
-      const response = await axiosInstance.get(`http://localhost:3000/employees/company/${auth.companyId}`);
-      
+      const response = await axiosInstance.get(`http://localhost:3000/employees/company/${auth.companyId}?page=${i}&limit=7`);
+      console.log(response)
+      setLastPage(response.data.totalPages) 
+      setCurrentPage(response.data.currentPage)
       setEmployees(response.data.employees); // Update state with fetched data
       setLoading(false); // Set loading to false after data is fetched
     } catch (error) {
@@ -110,6 +125,8 @@ const Users = () => {
  
     
   }, []);
+
+
 
   if (loading) {
     return <p>Loading...</p>;
@@ -210,8 +227,16 @@ const Users = () => {
             </tbody>
           </table>
         </div>
-
-       
+              <div style={{ 'display': 'flex','justify-content': 'center', 'align-items': 'center' }}>
+        <FaArrowLeft onClick={()=> pagination(1)}  style={{ 'font-size': '18px', 'color':'#6c757d', 'cursor':'pointer',pointerEvents: currentPage == 1 ? 'none' : 'auto'}}/>
+        <FaAngleDoubleLeft className="LeftArrow" onClick={()=> pagination(currentPage -1)} style={{ 'font-size': '18px', 'margin': '4px', 'color':'#6c757d', 'cursor':'pointer'}}/>
+        <span style={{ 'font-size': '20px'}} >{currentPage}</span>
+        <FaAngleDoubleRight  onClick={()=> pagination(currentPage +1)} style={{ 'font-size': '18px', 'margin': '4px', 'color':'#6c757d', 'cursor':'pointer'}} />
+        <FaArrowRight onClick={()=> pagination(lastPage)} style={{'font-size': '18px', 'color':'#6c757d', 'cursor':'pointer',pointerEvents: lastPage == currentPage ? 'none' : 'auto' }}/>
+        
+              </div>
+      
+        
 
 
         {/* Edit Modal */}
