@@ -75,7 +75,9 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-column", "mt-5")}>
+      <div className={classNames(Style.container)}>
+    <div>
+    <div className={classNames("d-flex", "justify-content-center", "align-items-center", "flex-column", "mt-5")}>
         <h1 className={classNames(Style.attendTitle, "text-center")}>Attend Guards</h1>
         <p className={classNames(Style.attendSuptitle, "text-center")}>Profile</p>
         <div className={classNames("d-flex", "align-items-center", "mt-3")}>
@@ -111,7 +113,13 @@ const ProfilePage = () => {
           </p>
         </div>
       </div>
+    
+    </div>
+      
+      <div className={classNames(Style.footer)}>
       <Navbar />
+      </div>
+   
 
       {/* Edit Modal */}
       <Modal show={showEditModal} onHide={handleCloseModal}>
@@ -159,6 +167,7 @@ const ProfilePage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      </div>
     </>
   );
 };

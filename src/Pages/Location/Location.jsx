@@ -84,6 +84,7 @@ const Location = () => {
 
   return (
     <>
+    <div className={classNames(Style.container)}>
       <div className={classNames("container")}>
         <div className={classNames("row", "align-items-center")}>
           <div className={classNames("col")}>
@@ -220,8 +221,11 @@ const Location = () => {
 
 
 
+      <div className={classNames(Style.footer)}>
 
       <Navbar activeIcon="map" />
+      </div>
+      </div>
     </>
   );
 }

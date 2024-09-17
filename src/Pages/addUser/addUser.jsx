@@ -75,6 +75,9 @@ const AddUser = () => {
   
   return (
     <>
+    <div className={classNames(Style.container)}>
+
+  
       <div className={classNames("container")}>
         <div className={classNames("row", "align-items-center")}>
           <div className={classNames("col")}>
@@ -220,7 +223,10 @@ const AddUser = () => {
           </div>
         </div>
       </div>
+      <div className={classNames(Style.footer)}>
       <Navbar activeIcon="plus" />
+      </div>
+      </div>
     </>
   );
 };

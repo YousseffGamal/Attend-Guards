@@ -89,7 +89,7 @@ const EmployeesRecord = () => {
   return (
     <>
   
-      <div>
+      <div className={classNames(Style.container)}>
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
             <div className={classNames("col")}>
@@ -245,8 +245,9 @@ const EmployeesRecord = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-
+        <div className={classNames(Style.footer)}>
         <Navbar activeIcon="clock" />
+        </div>
       </div>
     </>
   );

@@ -135,7 +135,7 @@ const Users = () => {
 
   return (
     <>
-      <div>
+      <div className={classNames(Style.container)}>
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
             <div className={classNames("col")}>
@@ -326,7 +326,11 @@ const Users = () => {
           </Modal.Footer>
         </Modal>
       </div>
+      <div className={classNames(Style.footer)}>
       <Navbar activeIcon="users" />
+
+      </div>
+  
     
     </>
   );

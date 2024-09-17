@@ -106,7 +106,12 @@ const Users = () => {
 
   return (
     <>
-      <div>
+
+
+
+      <div className={classNames(Style.container)}>
+
+
         <div className={classNames("container")}>
           <div className={classNames("row", "align-items-center")}>
             <div className={classNames("col")}>
@@ -114,7 +119,7 @@ const Users = () => {
                 Attend Guards
               </h1>
               <p className={classNames(Style.attendSuptitle, "text-center")}>
-                Plans
+                Locations
               </p>
             </div>
             <div
@@ -211,7 +216,9 @@ const Users = () => {
 
 
 
+        <div className={classNames(Style.footer)}>
         <Navbar activeIcon="ViewLocation" />
+        </div>
       </div>
         {/* Edit Modal */}
         <Modal show={showEditModal} onHide={handleCloseModal}>
