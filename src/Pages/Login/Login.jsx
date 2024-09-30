@@ -37,7 +37,7 @@ const Login = () => {
       navigate('/users') // Redirect after success
       } else {
         setErrorMessage(response.message); // Display error message
-        setSuccessMessage(''); // Clear success message
+       
       }
   };
 
