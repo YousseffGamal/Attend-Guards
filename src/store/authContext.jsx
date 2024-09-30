@@ -15,24 +15,23 @@ export const AuthProvider = ({ children }) => {
   const login = async (cred) => {
     try {
       const { data } = await axiosInstance.post("/signin", cred);
-  
+      console.log(data)
      
       setAuth({
-        token: data.token,
-        user: data.user,
-        companyId: data.user.companyId
+        token: data.user.token,
+        user: data.user.userExist,
+        companyId: data.user.userExist.companyId
       });
-
-      // Save data to localStorage
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("companyId", data.user.companyId); 
+      localStorage.setItem("token", data.user.token);
+      localStorage.setItem("user", JSON.stringify(data.user.userExist));
+      localStorage.setItem("companyId", data.user.userExist.companyId); 
       return { success: true, data };
     } catch (error) {
       console.log("Login failed:", error);
       return { success: false, message: error.response?.data?.message || "Login failed" };
     }
   };
+
 
   const logout = () => {
     axiosInstance.post('logout')

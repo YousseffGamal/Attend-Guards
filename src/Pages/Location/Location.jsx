@@ -191,7 +191,7 @@ const Location = () => {
           <input
                 type="number"
                 className="form-control"
-                placeholder="Range in kilo"
+                placeholder="Range in Meters"
                 name="radius"
                 value={Data.radius}
                 onChange={handleChange}
