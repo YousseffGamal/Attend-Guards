@@ -39,6 +39,7 @@ const AddUser = () => {
     try {
       const response = await axiosInstance.post('/addemployee', formData);
       setFormData({
+        title:'',
         name: '',
         email: '',
         password: '',
@@ -150,6 +151,18 @@ const AddUser = () => {
                     "mb-3"
                   )}
                   placeholder="Name"
+                />
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className={classNames(
+                    "form-control",
+                    Style.customInput,
+                    "mb-3"
+                  )}
+                  placeholder="title"
                 />
           
                 <input
