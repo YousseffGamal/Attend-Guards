@@ -128,10 +128,10 @@ const Users = () => {
 
 
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-  if (employees.length === 0) return <div>No employees found</div>;
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+  // if (employees.length === 0) return <div>No employees found</div>;
 
   return (
     <>
@@ -195,7 +195,7 @@ const Users = () => {
               </tr>
             </thead>
             <tbody>
-              {employees.map((employee, index) => (
+              {  employees.length === 0 ? <div>No employees found</div> : employees.map((employee, index) => (
                 <tr key={employee._id}>
                   <td>
                   {index +1 }
